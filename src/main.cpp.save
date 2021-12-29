@@ -46,6 +46,7 @@ String monthOfTheYear[12] = {
   "December",
 
 };
+
 //switchesON[0][] ={ "010100000000000000010101"};
 uint32_t actualTime = 0;
 bool lightFlag = false;
@@ -56,7 +57,7 @@ int allLampsOnCounter = 0;
 int sensorPin = A0; //define analog pin 2
 int digitalLight = D6;
 int digitalLightValue;
-bool value = false;
+int value = 0;
 int lightValue = 1000;
 const char* ssid = "ASUS";
 const char* password = "guildford";
@@ -65,22 +66,18 @@ int timeGetHour = 0;
 int timeGetMinutes = 0;
 int dst = 0;
 int minutes;
-int daysOfTheWeek;
+int dayOfTheWeeek;
 int valueOfTheLamp[9];
-int startLightValue = 810;
-int StartTimeMin = 15;
-int StartTimeHourStop = 6;
+int StartTimeMin = 30;
 int StartTimeHour = 14;
 int StopTimeHour = 21;
 int StopTimeMin = 30;
-int lampsStartedMin = 00;
-int lampsStartedHour = 00;
 bool timerStartStop = false;
 int ledPin = D0;
 String timedate = "";
 String timedate2 = "";
 const unsigned long TRANSMITTER_ADDRESSNEW = 25606094; //My personal transmitter address
-const int PIN_TRANSMITTER = 4;  // GPIO4 / D2
+const int PIN_TRANSMITTER = 4; 
 NewRemoteTransmitter transmitternew(TRANSMITTER_ADDRESSNEW, PIN_TRANSMITTER, 230, 3);
 
 WiFiServer server(80);
@@ -95,16 +92,6 @@ const int NTP_PACKET_SIZE = 48;  // NTP time stamp is in the first 48 bytes of t
 
 byte NTPBuffer[NTP_PACKET_SIZE]; // buffer to hold incoming and outgoing packets
 
-int dayofweek(time_t now, int tz_offset) {
-	// Calculate number of seconds since midnight 1 Jan 1970 local time
-	time_t localtime = now + (tz_offset * 60 * 60);
-	// Convert to number of days since 1 Jan 1970
-	int days_since_epoch = localtime / 86400;
-	// 1 Jan 1970 was a Thursday, so add 4 so Sunday is day 0, and mod 7
-	int day_of_week = (days_since_epoch + 4) % 7; 
-
-	return day_of_week;
-}
 
 
 uint32_t getTime() {
@@ -237,7 +224,6 @@ void lampsON(){
     mySwitch.send(switchesON[s]);
     delay(1000);
     valueOfTheLamp[s] = HIGH;
-    value = true;
 
   }
   transmitternew.sendUnit(7, 1);// NEW NEXA Transmitter
@@ -256,7 +242,6 @@ void lampsOFF(){
       mySwitch.send(switchesOFF[s]);
       delay(1000);
       valueOfTheLamp[s] = LOW;
-      value = false;
 
     }
     transmitternew.sendUnit(7, 0); // NEW NEXA Transmitter
@@ -290,15 +275,15 @@ void webServer(){
 
   // Match the request
 
-  //int value = false;
+  int value = LOW;
 
   if (request.indexOf("/LED=ON") != -1) {
     //digitalWrite(ledPin, LOW);
-    Serial.println(" All lamps ON");
+      Serial.println(" All lamps ON");
       //mySwitch.send(switchesON[3]);
-    valueOfTheLamp[3] = HIGH;
-    lampsON(); // All lamps ON
-    value = true;
+      valueOfTheLamp[3] = HIGH;
+      lampsON(); // All lamps ON
+    value = HIGH;
 
   }
   if (request.indexOf("/LED=OFF") != -1){
@@ -307,7 +292,7 @@ void webServer(){
     //mySwitch.send(switchesOFF[3]);
     valueOfTheLamp[3] = LOW;
     lampsOFF(); // All Lamps switchesOFF
-    value = false;
+    value = LOW;
   }
 
   if (request.indexOf("/LAMP1=ON") != -1) {
@@ -538,23 +523,16 @@ void webServer(){
   client.println(lightValue);
   client.print("  LjusDIGITALT:");
   client.println(digitalLightValue);
-  client.print("<br>  Start ljusv&aumlrde:");
-  client.println(startLightValue);
-  client.print("  Ljuset startat:");
-  client.print(lampsStartedHour);
-  client.print(":");
-  client.print(lampsStartedMin);
-
 
   client.println("</h1>");
-  client.println("<meta http-equiv=\"refresh\" content=\"60\">");
+//  client.println("<meta http-equiv=\"refresh\" content=\"30\">");
   client.println("</head>");
   client.println("<html>");
-  client.println("<body style=\"background-color:lightgreen;\">");
-  if(value == true) {
+  client.println("<body style=\"background-color:powderblue;\">");
+ //  client.print("<META HTTP-EQUIV="refresh" CONTENT="15">");
+  if(value == HIGH) {
     client.print("<font color=\"FF3333\">All ON </font>");
-  } 
-  if (value == false) {
+  } else {
     client.print("<font color=\"0000FF\">All OFF </font>");
   }
 
@@ -728,6 +706,7 @@ ArduinoOTA.handle();
 
 //lampsON();
 
+
 Serial.print("Lampor= ");
 for (int k = 0; k < 9;k++){
 
@@ -751,8 +730,7 @@ Serial.print(timeGetHour);
 Serial.print(":");
 Serial.println(timeGetMinutes);
 // ******************* START 
-StartTimeHourStop = StartTimeHour + 6;
-if (timeGetHour >= StartTimeHour && timeGetHour <= StartTimeHourStop) {
+if (timeGetHour >= 14 && timeGetHour <= 18) {
   Serial.print(" Nu kanske lamporna kan TÄNDAS:");
   Serial.print(timeGetHour); 
   Serial.print(" min:");
@@ -773,13 +751,13 @@ if (timeGetHour >= StartTimeHour && timeGetHour <= StartTimeHourStop) {
 }
 // ******************* START 
 // ******************* STOP
-if (timeGetHour >= StopTimeHour) { 
+if (timeGetHour >= 21) { 
   Serial.print(" Nu kanske lamporna kan SLÄCKAS:");
   Serial.print(timeGetHour);
   Serial.print(" min:");
   Serial.println(timeGetMinutes);
 
-  if (timeGetMinutes >= StopTimeMin){
+  if (timeGetMinutes >= 31){
   stopFlag = true;
   startFlag = false; // Now the lights STOPS
   Serial.print(" Nu kan lamporna SLÄCKAS:");
@@ -791,7 +769,7 @@ if (timeGetHour >= StopTimeHour) {
 
 }
 // ******************* STOP
-if(lightValue <= startLightValue && !allLampsOn && startFlag && !stopFlag){ // START the lamps
+if(lightValue <= 830 && !allLampsOn && startFlag && !stopFlag){ // START the lamps
     Serial.print(" START allLampsCounter:");
     Serial.println(allLampsOnCounter);
 
@@ -801,8 +779,6 @@ if(lightValue <= startLightValue && !allLampsOn && startFlag && !stopFlag){ // S
     valueOfTheLamp[3] = HIGH;
     lampsON();
     allLampsOn = true ;
-    lampsStartedHour = timeGetHour;
-    lampsStartedMin = timeGetMinutes;
     Serial.print(" LAMPS ON !!***");
     Serial.print(" startFlag:");
     Serial.print(startFlag);
@@ -840,8 +816,6 @@ if( allLampsOn && !startFlag && stopFlag){ // STOP the LAMPS
 
   }
 }
-Serial.print(" Start value:");
-Serial.print(startLightValue);
 Serial.print(" allLampsOn:");
 Serial.print(allLampsOn);
 Serial.print(" lightValue:");
@@ -853,9 +827,8 @@ Serial.print(StartTimeMin);
 Serial.print(" Stoptid:");
 Serial.print(StopTimeHour);
 Serial.print(":");
-Serial.print(StopTimeMin);
-Serial.print("  Value:");
-Serial.println(value); 
+Serial.println(StopTimeMin);
+ 
 delay(3000);
 
 webServer();
