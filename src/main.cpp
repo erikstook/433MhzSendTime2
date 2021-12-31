@@ -68,11 +68,11 @@ int minutes;
 int daysOfTheWeek;
 int valueOfTheLamp[9];
 int startLightValue = 810;
-int StartTimeMin = 15;
+int StartTimeMin = 00;
 int StartTimeHourStop = 6;
 int StartTimeHour = 14;
 int StopTimeHour = 21;
-int StopTimeMin = 30;
+int StopTimeMin = 34;
 int lampsStartedMin = 00;
 int lampsStartedHour = 00;
 bool timerStartStop = false;
@@ -519,7 +519,7 @@ void webServer(){
   client.println(""); //  do not forget this one
   client.println("<!DOCTYPE HTML>");
   client.println("<head>");
-  client.println("<h1>S&aumltt p&aring lamporna TWO. <br>");
+  client.println("<h1>S&aumltt p&aring lamporna 89. <br>");
   client.print(" Klockan:");
   client.print(timeGetHour);
   client.print(":");
@@ -758,7 +758,7 @@ if (timeGetHour >= StartTimeHour && timeGetHour <= StartTimeHourStop) {
   Serial.print(" min:");
   Serial.println(timeGetMinutes);
 
-  if (timeGetMinutes >= 19){
+  if (timeGetMinutes >= StartTimeMin){
   startFlag = true; // Now the lights may start
   stopFlag = false;
   Serial.print(" Nu kan lamporna TÄNDAS:");
