@@ -547,7 +547,7 @@ void webServer(){
 
 
   client.println("</h1>");
-  client.println("<meta http-equiv=\"refresh\" content=\"60\">");
+//  client.println("<meta http-equiv=\"refresh\" content=\"60\">");
   client.println("</head>");
   client.println("<html>");
   client.println("<body style=\"background-color:lightgreen;\">");
@@ -856,7 +856,7 @@ Serial.print(":");
 Serial.print(StopTimeMin);
 Serial.print("  Value:");
 Serial.println(value); 
-delay(3000);
+delay(1500);
 
 webServer();
 
