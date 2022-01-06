@@ -856,6 +856,9 @@ Serial.print(":");
 Serial.print(StopTimeMin);
 Serial.print("  Value:");
 Serial.println(value); 
+Serial.print("  DIGITAL Value:");
+Serial.println(digitalLightValue);
+
 delay(1500);
 
 webServer();
