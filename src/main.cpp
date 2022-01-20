@@ -462,41 +462,86 @@ void webServer(){
     //lampsOFF();
     valueOfTheLamp[8] = LOW;
   }
-  if (request.indexOf("/STARTTIME+") != -1){
-    StartTimeMin = StartTimeMin + 15;
-    if (StartTimeMin > 45){
+
+
+ if (request.indexOf("/STARTTIME20+") != -1){
+    StartTimeMin = StartTimeMin + 20;
+    if (StartTimeMin > 59){
       StartTimeHour = StartTimeHour + 1;
-      StartTimeMin = 0;
+      StartTimeMin = StartTimeMin -60;
     }
   }
-  if (request.indexOf("/STARTTIME-") != -1){
-    StartTimeMin = StartTimeMin - 15;
+  if (request.indexOf("/STARTTIME20-") != -1){
+    StartTimeMin = StartTimeMin - 20;
     if (StartTimeMin < 0){
       StartTimeHour = StartTimeHour - 1;
-      StartTimeMin = 45;
+      StartTimeMin = StartTimeMin + 60;
       if (StartTimeHour < 0 && StartTimeMin < 0) {
         StartTimeHour = 0;
-        StartTimeMin = 45;
+        StartTimeMin = 0;
       }
       //StartTimeMin = 0;
     }
   }
 
+
+  if (request.indexOf("/STARTTIME+") != -1){
+    StartTimeMin = StartTimeMin + 2;
+    if (StartTimeMin > 58){
+      StartTimeHour = StartTimeHour + 1;
+      StartTimeMin = 0;
+    }
+  }
+  if (request.indexOf("/STARTTIME-") != -1){
+    StartTimeMin = StartTimeMin - 2;
+    if (StartTimeMin < 0){
+      StartTimeHour = StartTimeHour - 1;
+      StartTimeMin = 58;
+      if (StartTimeHour < 0 && StartTimeMin < 0) {
+        StartTimeHour = 0;
+        StartTimeMin = 0;
+      }
+      //StartTimeMin = 0;
+    }
+  }
+
+
+  if (request.indexOf("/STOPTIME20+") != -1){
+    StopTimeMin = StopTimeMin + 20;
+    if (StopTimeMin > 59){
+      StopTimeHour = StopTimeHour + 1;
+      StopTimeMin = StopTimeMin - 60;
+    }
+  }
+  if (request.indexOf("/STOPTIME20-") != -1){
+    StopTimeMin = StopTimeMin - 20;
+    if (StopTimeMin < 0){
+      StopTimeHour = StopTimeHour - 1;
+      StopTimeMin = StopTimeMin +60;
+      if (StopTimeHour < 0 && StopTimeMin < 0) {
+        StopTimeHour = 0;
+        StopTimeMin = 0;
+      }
+      //StartTimeMin = 0;
+    }
+  }
+
+
   if (request.indexOf("/STOPTIME+") != -1){
-    StopTimeMin = StopTimeMin + 15;
-    if (StopTimeMin > 45){
+    StopTimeMin = StopTimeMin + 2;
+    if (StopTimeMin > 58){
       StopTimeHour = StopTimeHour + 1;
       StopTimeMin = 0;
     }
   }
   if (request.indexOf("/STOPTIME-") != -1){
-    StopTimeMin = StopTimeMin - 15;
+    StopTimeMin = StopTimeMin - 2;
     if (StopTimeMin < 0){
       StopTimeHour = StopTimeHour - 1;
-      StopTimeMin = 45;
+      StopTimeMin = 58;
       if (StopTimeHour < 0 && StopTimeMin < 0) {
         StopTimeHour = 0;
-        StopTimeMin = 45;
+        StopTimeMin = 0;
       }
       //StartTimeMin = 0;
     }
@@ -642,8 +687,13 @@ void webServer(){
   client.println("<a href=\"/LAMP9=ON\"><button type=\"button\"><font color=\"FF3333\">No 9 ON!</font></button></a>");
   client.println("<a href=\"/LAMP9=OFF\"><button type=\"button\"><font color=\"0000FF\">No 9 OFF!</font></button></b><br><br>");
   client.println("<a><h2>- SET START/STOP-TIMER - </h2></a><br>");
-  client.println("<a href=\"/STARTTIME+\"><button type=\"button\"><font color=\"0000FF\">STARTTIME+ 15min</font></button></a>");
-  client.println("<a href=\"/STARTTIME-\"><button type=\"button\"><font color=\"0000FF\">STARTTIME- 15min</font></button></a>");
+  client.println("<a href=\"/STARTTIME+\"><button type=\"button\"><font color=\"0000FF\">STARTTIME + 2min</font></button></a>");
+  client.println("<a href=\"/STARTTIME-\"><button type=\"button\"><font color=\"0000FF\">STARTTIME - 2min</font></button></a>");
+
+  client.println("<a href=\"/STARTTIME20+\"><button type=\"button\"><font color=\"0000FF\">STARTTIME + 20min</font></button></a>");
+  client.println("<a href=\"/STARTTIME20-\"><button type=\"button\"><font color=\"0000FF\">STARTTIME - 20min</font></button></a>");
+
+
 
   //client.println("<button type=\"button\"><button color=\"FF3333\">Time Up</button></a><br><br>");
   client.println("<a><b> Start time:</a>");
@@ -653,8 +703,16 @@ void webServer(){
   client.println("<br><br>");
   //client.println(sensorValue);
 
-  client.println("<a href=\"/STOPTIME+\"><button type=\"button\"><font color=\"0000FF\">STOPTIME+ 15min</font></button></a>");
-  client.println("<a href=\"/STOPTIME-\"><button type=\"button\"><font color=\"0000FF\">STOPTIME- 15min</font></button></a>");
+  client.println("<a href=\"/STOPTIME+\"><button type=\"button\"><font color=\"0000FF\">STOPTIME + 2min</font></button></a>");
+  client.println("<a href=\"/STOPTIME-\"><button type=\"button\"><font color=\"0000FF\">STOPTIME - 2min</font></button></a>");
+
+  client.println("<a href=\"/STOPTIME20+\"><button type=\"button\"><font color=\"0000FF\">STOPTIME + 20min</font></button></a>");
+
+  client.println("<a href=\"/STOPTIME20-\"><button type=\"button\"><font color=\"0000FF\">STOPTIME - 20min</font></button></a>");
+
+
+
+
 
   //client.println("<button type=\"button\"><button color=\"FF3333\">Time Up</button></a><br><br>");
   client.println("<a><b> Stop time:</a>");
