@@ -69,8 +69,8 @@ int daysOfTheWeek;
 int valueOfTheLamp[9];
 int startLightValue = 810;
 int StartTimeMin = 00;
-int StartTimeHourStop = 3;
-int StartTimeHour = 18;
+int StartTimeHourStop = 6;
+int StartTimeHour = 15;
 int StopTimeHour = 21;
 int StopTimeMin = 34;
 int lampsStartedMin = 00;
@@ -809,7 +809,7 @@ Serial.print(timeGetHour);
 Serial.print(":");
 Serial.println(timeGetMinutes);
 // ******************* START 
-StartTimeHourStop = StartTimeHour + 3;
+StartTimeHourStop = StartTimeHour + 6;
 if (timeGetHour >= StartTimeHour && timeGetHour <= StartTimeHourStop) {
   Serial.print(" Nu kanske lamporna kan TÄNDAS:");
   Serial.print(timeGetHour); 
