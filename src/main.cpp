@@ -770,7 +770,7 @@ ArduinoOTA.handle();
     prevActualTime = actualTime;
     //Serial.printf("\rUTC time:\t%d:%d:%d   ", getHours(actualTime), getMinutes(actualTime), getSeconds(actualTime));
     timeGetMinutes = getMinutes(actualTime);
-    timeGetHour = getHours(actualTime) + 2;  // Sommartid + 2, Vintertid + 1
+    timeGetHour = getHours(actualTime) + 1;  // Sommartid + 2, Vintertid + 1
     if (timeGetHour == 23){
       timeGetHour = 01;
     }
